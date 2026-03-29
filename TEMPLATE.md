@@ -16,7 +16,10 @@
 
 ## Status & Next Steps
 
-**Current Phase:** `[ ] Recon  [ ] Active  [ ] Done`
+**Current Phase:**
+- [ ] Recon
+- [ ] Active
+- [ ] Done
 
 **Next Steps:**
 - [ ] ...
@@ -50,7 +53,6 @@
 | Component | Function | Datasheet |
 |---|---|---|
 | [e.g. STM32F103VD] | [e.g. Primary MCU] | [link or filename] |
-| | | |
 
 ---
 
@@ -123,4 +125,4 @@ _Consolidated actionable findings. What was found and what it enables — no sev
 
 _Free-form. Dead ends, half-formed observations, questions to revisit._
 
--
+_[your notes here]_

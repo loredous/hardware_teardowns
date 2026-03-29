@@ -9,10 +9,14 @@
 | Device | [e.g. Withings Body+ Smart Scale] |
 | Model / Part Number | [e.g. WBS05] |
 | Firmware Version | [e.g. unknown / dumped] |
-| Acquired | [YYYY-MM-DD] |
-| Prior Research | [links to relevant prior work, or "none found"] |
+| Started | [YYYY-MM-DD] |
 
 ---
+
+## Worklog
+
+**2026-03-28**
+- Physical hardware teardown
 
 ## Status & Next Steps
 

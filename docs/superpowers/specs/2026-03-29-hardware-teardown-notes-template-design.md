@@ -33,8 +33,11 @@ Linear, top-to-bottom document. Sections in order:
 5. **Debug Interfaces** — per interface: type, board location, pinout, speed, findings
 6. **Firmware** — extraction method, memory map, dump file references, notable strings/symbols
 7. **Wireless** — per radio: protocol, chip, observations, tools, findings
-8. **Findings & Vulnerabilities** — consolidated actionable findings across all sections
+8. **Findings** — consolidated actionable findings across all sections (no CVEs, severity ratings, or remediation steps — just what was found and what it enables)
+9. **Notes / Scratch** — free-form working notes, dead ends, observations that don't yet fit a category, questions to revisit
 
 ## Output
 
 A single file: `TEMPLATE.md` at the root of the `hardware_teardowns` repo.
+
+**Usage convention:** To start a new teardown, copy `TEMPLATE.md` into a new device subdirectory as `NOTES.md` (e.g., `cp TEMPLATE.md <device_name>/NOTES.md`) and fill it in from there.

@@ -20,18 +20,25 @@
 **2026-03-29**
 - JTAG access
 - Firmware dumped as `stm32_bank_0_dump.bin`
+**2026-03-30**
+- Full USB HID command enumeration and live testing (`wbs01_diag.py`)
+- Corrected all payload sizes from firmware analysis (Ghidra MCP)
+- Confirmed working: probe, status, rtc, weighttest, dac, backlight, lcd, spiflash, wl, dump
+- Discovered BCM4315 WiFi firmware: 254,288 bytes on SPI flash, version 0x4d
+- Confirmed memory dump via USB HID (access_type=1): reads arbitrary flash and SRAM
 
 ## Status & Next Steps
 
 **Current Phase:**
 - [X] Recon
-- [ ] Active
+- [X] Active
 - [ ] Done
 
 **Next Steps:**
-- [ ] Decompile firmware
-- [ ] Enumerate USB HID commands
-- [ ] Inspect Wifi reporting protocol
+- [X] Decompile firmware
+- [X] Enumerate USB HID commands
+- [ ] Test spiflash read after `wl` init (BCM4315 firmware accessible)
+- [ ] Inspect WiFi reporting protocol (plaintext HTTP to scalews.withings.net)
 
 ---
 
@@ -157,16 +164,20 @@ See STM32
 
 ## Findings
 
-_Consolidated actionable findings. What was found and what it enables — no severity ratings or CVE format needed._
+_Consolidated actionable findings. What was found and what it enables._
 
-- **[Finding title]:** [description + what it enables, e.g. "Unauthenticated UART shell: full root shell accessible without disassembly via J3 header"]
+- **Plaintext HTTP reporting:** All weight measurements uploaded to `scalews.withings.net` via unencrypted HTTP. Query params include `sessionid`, `macaddress`, `userid`, `meastime`, and raw `measures`. Trivially interceptable on local network.
+- **Hardcoded device credentials:** MAC `00:24:e4:03:f3:22`, device ID `2ce84b84e6833d5c`, and OpenDNS `208.67.222.222` are hardcoded in firmware — not provisioned per-unit.
+- **No JTAG read protection:** Full firmware dump possible via J16, no RDP enabled on STM32F103VDT6.
+- **USB HID undocumented commands:** All 0x02xx commands confirmed present in firmware with no auth gating. Working commands confirmed: `dump` (reads arbitrary flash/SRAM), `wl` (triggers BCM4315 WiFi init), `dac`, `rtc`, `weighttest`, `backlight`, `lcd`, `spiflash`. See [USB_HID.md](USB_HID.md).
+- **Memory dump via USB HID:** CMD 0x0210 with access_type=1 reads arbitrary MCU memory over USB. Confirmed: reads flash at 0x08000000 (interrupt vectors match JTAG dump) and SRAM at 0x20000000. No authentication required.
+- **BCM4315 WiFi firmware on SPI flash:** CMD 0x020c (`wl`) triggers DHD init and reveals 254,288-byte WiFi firmware at version 0x4d on the BCM4315's SPI flash. After `wl` init, CMD 0x020e (`spiflash`) may be able to read BCM4315 firmware.
 
 ---
 
 ## Notes / Scratch
 
-- Mini-USB port in battery area is used for intial setup
-  - Presents as USB HID device
+- Mini-USB port in battery area is used for initial setup
+  - Presents as USB HID device — full command enumeration in [USB_HID.md](USB_HID.md)
   - https://github.com/zshannon/wbs01-web
-  - Possible to fuzz command structure?
 
